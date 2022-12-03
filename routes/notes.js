@@ -13,24 +13,25 @@ myNotes.get("/", (req, res) => {
 // DELETE Route for a specific Note
 myNotes.delete("/:id", (req, res) => {
   const noteId = req.params.id;
-  readFromFile("./db/tips.json")
+  readFromFile("./db/db.json")
     .then((data) => JSON.parse(data))
     .then((json) => {
       // Make a new array of all notes. Exclude selected one
-      const result = json.filter((note) => note.id !== noteId);
+      const result = json.filter((note) => note.id != noteId);
 
       // Save the array
-      writeToFile("./db/tips.json", result);
+      writeToFile("./db/db.json", result);
 
       // Respond to the DELETE request
       res.json(`${noteId} has been deleted`);
+      console.log(noteId)
     });
 });
 
 // POST Route for new note
 myNotes.post("/", (req, res) => {
   console.log(req.body);
-
+  let id = Date.now();
   const { text, title } = req.body;
 
   if (text && title) {
